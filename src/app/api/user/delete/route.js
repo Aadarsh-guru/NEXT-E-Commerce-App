@@ -3,10 +3,16 @@ import User from "@/models/UserModel";
 import OTP from "@/models/OTPModel";
 import { NextRequest, NextResponse } from "next/server";
 import DeleteFromS3 from "@/helpers/DeleteFromS3";
+import authOptions from "@/helpers/nextAuthOptions";
+import { getServerSession } from "next-auth";
 
 export const POST = async (NextRequest) => {
     await connect();
     try {
+        const session = await getServerSession(authOptions);
+        if (!session) {
+            return NextResponse.json({ message: 'Unauthorized access', success: false }, { status: 401 })
+        }
         const { otp, email } = await NextRequest.json();
         const otpDoc = await OTP.findOne({ $and: [{ email: email }, { code: otp }] });
         if (!otpDoc) {

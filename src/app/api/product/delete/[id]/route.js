@@ -1,12 +1,18 @@
 import connect from '@/config/dbConfig'
 import DeleteFromS3 from '@/helpers/DeleteFromS3'
+import authOptions from '@/helpers/nextAuthOptions'
 import Category from '@/models/CategoryModel'
 import Product from '@/models/ProductModel'
+import { getServerSession } from 'next-auth'
 import { NextResponse } from 'next/server'
 
 export const DELETE = async (request, { params }) => {
     await connect()
     try {
+        const session = await getServerSession(authOptions);
+        if (!session) {
+            return NextResponse.json({ message: 'Unauthorized access', success: false }, { status: 401 })
+        }
         const product = await Product.findByIdAndDelete(params.id)
         if (!product) {
             return NextResponse.json({ message: 'Product not found.', success: false }, { status: 404 });

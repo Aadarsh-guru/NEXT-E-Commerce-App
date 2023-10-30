@@ -17,13 +17,11 @@ const Success = () => {
                 <div className="text-lg font-bold mt-2">
                     Your order has been placed successfully.
                 </div>
-                <div className="text-base mt-5">
-                    For any product related query, drop an email to
-                </div>
-                <div className="underline">aadarshgurug@gmail.com</div>
-
-                <Link href="/" className="font-bold mt-5 hover:text-black/[0.7] transition-transform active:scale-[98%]">
+                <Link href="/" className="font-bold mt-2 text-center hover:text-black/75 transition-transform active:scale-[98%] border-[1px] border-black/50 py-2 px-4 rounded-md">
                     Continue Shopping
+                </Link>
+                <Link href={'/account/orders'} className="font-bold mt-2 bg-black text-white text-center hover:bg-black/75 transition-transform active:scale-[98%] border-[1px] border-black/50 py-2 px-4 rounded-md" >
+                    Your Orders
                 </Link>
             </div>
         </div>

@@ -1,11 +1,17 @@
 import connect from "@/config/dbConfig";
 import DeleteFromS3 from "@/helpers/DeleteFromS3";
+import authOptions from "@/helpers/nextAuthOptions";
 import User from "@/models/UserModel";
+import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
 export const PUT = async (NextRequest) => {
     await connect();
     try {
+        const session = await getServerSession(authOptions);
+        if (!session) {
+            return NextResponse.json({ message: 'Unauthorized access', success: false }, { status: 401 })
+        }
         const { name, email, image } = await NextRequest.json();
         const user = await User.findOne({ email: email })
         if (name) {

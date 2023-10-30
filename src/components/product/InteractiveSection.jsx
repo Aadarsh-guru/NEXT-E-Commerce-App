@@ -2,6 +2,7 @@
 import { addProductsInCart } from '@/store/slices/CartSlice';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import toast from 'react-hot-toast';
@@ -10,7 +11,6 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const InteractiveSection = ({ product }) => {
 
-    const router = useRouter();
     const [quantity, setQuantity] = React.useState(1);
 
     const incrementQuantity = () => {
@@ -38,11 +38,16 @@ const InteractiveSection = ({ product }) => {
 
     const queryClient = useQueryClient();
     const dispatch = useDispatch();
+    const session = useSession();
+    const router = useRouter();
     useQuery(['cart'], fetchCartProducts, { staleTime: Infinity })
     const [loading, setLoading] = React.useState(false);
     const { products } = useSelector(state => state.cart)
 
     const handleCart = async () => {
+        if (session.status === 'unauthenticated') {
+            return router.push('/login');
+        }
         try {
             setLoading(true);
             const response = await axios.post(`/api/cart`, {

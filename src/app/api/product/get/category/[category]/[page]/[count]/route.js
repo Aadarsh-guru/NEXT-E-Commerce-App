@@ -2,7 +2,6 @@ import connect from '@/config/dbConfig'
 import Product from '@/models/ProductModel';
 import { NextResponse } from 'next/server'
 
-
 export const GET = async (request, { params }) => {
     await connect();
     try {

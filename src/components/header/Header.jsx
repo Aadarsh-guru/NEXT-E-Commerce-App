@@ -48,8 +48,9 @@ const Header = () => {
 
     return (
         <div className={`w-full h-[50px] md:h-[80px]  flex items-center justify-between z-20 sticky top-0 transition-transform duration-300`}>
-            <Link href='/' >
-                <img loading='lazy' src={'/logo.svg'} className='w-[40px] md:w-[60px]' />
+            <Link href='/' className='text-xl sm:text-2xl md:text-2xl lg:text-3xl font-medium text-black/75 transition-transform hover:text-black/100' >
+                {/* <img loading='lazy' src={'/logo.svg'} className='w-[40px] md:w-[60px]' /> */}
+                {process.env.NEXT_PUBLIC_APP_NAME}
             </Link>
             <NavbarMenu setShowCatMenu={setShowCatMenu} showCatMenu={showCatMenu} categories={data?.categories} isFetching={isFetching} />
             {

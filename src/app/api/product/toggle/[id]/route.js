@@ -1,10 +1,16 @@
 import connect from '@/config/dbConfig'
+import authOptions from '@/helpers/nextAuthOptions'
 import Product from '@/models/ProductModel'
+import { getServerSession } from 'next-auth'
 import { NextResponse } from 'next/server'
 
 export const PUT = async (request, { params }) => {
     await connect()
     try {
+        const session = await getServerSession(authOptions);
+        if (!session) {
+            return NextResponse.json({ message: 'Unauthorized access', success: false }, { status: 401 })
+        }
         const product = await Product.findById(params.id);
         if (!product) {
             return NextResponse.json({ message: 'product not found', success: false }, { status: 404 })

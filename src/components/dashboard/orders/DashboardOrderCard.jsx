@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 
-const DashboardOrderCard = ({ order, page, tab, queryClient, setOrders }) => {
+const DashboardOrderCard = ({ order, setOrders }) => {
 
     const router = useRouter();
     const [loading, setLoading] = useState(false);
@@ -44,7 +44,6 @@ const DashboardOrderCard = ({ order, page, tab, queryClient, setOrders }) => {
                 toast.success(data?.message);
                 setAction(data?.order.status);
                 setOrders(orders => orders.filter(o => o._id !== order._id))
-                queryClient.invalidateQueries([page, tab])
             } else {
                 toast.error(data.message)
             }
@@ -85,10 +84,11 @@ const DashboardOrderCard = ({ order, page, tab, queryClient, setOrders }) => {
                     </div>
                     <div>
                         <p className="font-semibold text-xl mb-2">Shipping Address</p>
-                        <p className="text-gray-800">
+                        <p className="text-gray-800 break-words ">
                             {address.firstName} {address.lastName}, {address.phone}, {address.addressDetail},
-                            {address.address}, {address.city}, {address.pincode}, {address.email}
+                            {address.address}, {address.city}, {address.pincode}
                         </p>
+                        <p className="text-gray-800 break-words">{address.email}</p>
                     </div>
                 </div>
                 <div className="flex justify-between items-center">

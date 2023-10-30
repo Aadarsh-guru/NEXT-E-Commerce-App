@@ -13,11 +13,12 @@ const Failed = () => {
             <div className="max-w-[600px] rounded-lg p-5 border border-black mx-auto flex flex-col">
                 <div className="text-2xl font-bold">Payment failed!</div>
                 <div className="text-base mt-5">
-                    For any product related query, drop an email to
+                    For any payment related query , contact to us.
                 </div>
-                <div className="underline">aadarshgurug@gmail.com</div>
-
-                <Link href="/" className="font-bold mt-5 hover:text-black/[0.7] transition-transform active:scale-[98%]">
+                <Link href={'/contact'} className="font-bold mt-2 bg-black text-white text-center hover:bg-black/75 transition-transform active:scale-[98%] border-[1px] border-black/50 py-2 px-4 rounded-md" >
+                    Contact Us
+                </Link>
+                <Link href="/" className="font-bold mt-2 text-center hover:text-black/75 transition-transform active:scale-[98%] border-[1px] border-black/50 py-2 px-4 rounded-md">
                     Continue Shopping
                 </Link>
             </div>

@@ -576,3 +576,70 @@ export const adminOrderNotificationTemplate = ({ orderId, paymentId, products, a
       </html>
   `;
 };
+
+export const contactEmailTemplate = ({ firstName, lastName, email, phone, subject, message }) => {
+  return `
+ <!DOCTYPE html>
+ <html>
+ <head>
+     <style>
+         body {
+             font-family: Arial, sans-serif;
+             background-color: #f2f2f2;
+         }
+         .email-container {
+             max-width: 600px;
+             background-color: #ffffff;
+             padding: 20px;
+             border: 1px solid #ccc;
+             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+         }
+         .header {
+             background-color: #007BFF;
+             color: #fff;
+             text-align: center;
+             padding: 20px;
+             border-radius: 5px 5px 0 0;
+         }
+         .header h1 {
+             font-size: 24px;
+         }
+         .contact-details {
+             margin: 20px 0;
+         }
+         .contact-details p {
+             margin: 10px 0;
+             font-size: 16px;
+         }
+         .message {
+             background-color: #f9f9f9;
+             border: 1px solid #ccc;
+             padding: 20px;
+             border-radius: 5px;
+         }
+         .message p {
+             margin: 10px 0;
+         }
+     </style>
+ </head>
+ <body>
+     <div class="email-container">
+         <div class="header">
+             <h1>Contact Form Submission - ${process.env.NEXT_PUBLIC_APP_NAME}</h1>
+         </div>
+         <div class="contact-details">
+             <p>Thank you for getting in touch. Here are the details of the message:</p>
+             <p><strong>Name:</strong> ${firstName} ${lastName}</p>
+             <p><strong>Email:</strong> ${email}</p>
+             <p><strong>Phone:</strong> ${phone}</p>
+             <p><strong>Subject:</strong> ${subject}</p>
+         </div>
+         <div class="message">
+             <p><strong>Message:</strong></p>
+             <p>${message}</p>
+         </div>
+     </div>
+ </body>
+ </html>
+`;
+}

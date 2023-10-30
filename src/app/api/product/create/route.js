@@ -1,15 +1,18 @@
 import connect from "@/config/dbConfig";
+import authOptions from "@/helpers/nextAuthOptions";
 import Category from "@/models/CategoryModel";
 import Product from "@/models/ProductModel";
+import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
 export const POST = async (request) => {
     await connect();
-
     try {
+        const session = await getServerSession(authOptions);
+        if (!session) {
+            return NextResponse.json({ message: 'Unauthorized access', success: false }, { status: 401 })
+        }
         const reqBody = await request.json();
-
-        // Add checks for required fields
         if (
             !reqBody.title ||
             !reqBody.subTitle ||
@@ -22,7 +25,6 @@ export const POST = async (request) => {
         ) {
             return NextResponse.json({ message: 'Please provide all required fields.', success: false }, { status: 400 });
         }
-
         // Create a new Product instance
         const newProduct = new Product({
             title: reqBody.title,

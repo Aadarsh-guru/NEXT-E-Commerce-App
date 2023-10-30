@@ -8,6 +8,8 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useDispatch, useSelector } from 'react-redux';
 import { addProducts } from '@/store/slices/WishlistSlice';
 import ShareModel from '../wishlist/ShareModel';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 const ShareSection = ({ product }) => {
 
@@ -24,11 +26,16 @@ const ShareSection = ({ product }) => {
 
     const queryClient = useQueryClient();
     const dispatch = useDispatch();
+    const session = useSession();
+    const router = useRouter();
     useQuery(['wishlist'], fetchWishlistProducts, { staleTime: Infinity })
     const [loading, setLoading] = React.useState(false);
     const { products } = useSelector(state => state.wishlist)
 
     const handleWishlist = async () => {
+        if (session.status === 'unauthenticated') {
+            return router.push('/login');
+        }
         try {
             setLoading(true);
             const response = await axios.post(`/api/wishlist`, {

@@ -136,7 +136,7 @@ const OrdersContainer = () => {
                                 <div className="gap-5 my-10">
                                     {
                                         orders?.map((order, index) => (
-                                            <DashboardOrderCard order={order} key={index} page={page} tab={tab} queryClient={queryClient} setOrders={setOrders} />
+                                            <DashboardOrderCard order={order} key={index} setOrders={setOrders} />
                                         ))
                                     }
                                 </div>
