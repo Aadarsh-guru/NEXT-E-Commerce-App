@@ -10,6 +10,16 @@ export const metadata = {
 
 export const dynamic = 'force-dynamic'
 
+const getSlides = async () => {
+  try {
+    const slidesResponse = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/slide`)
+    return slidesResponse.data?.slides || [];
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}
+
 const getBestSellerProducts = async () => {
   try {
     const bestsellerResponse = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/product/get/get-bestseller`);
@@ -33,12 +43,13 @@ const getFeaturedProducts = async () => {
 
 const Home = async () => {
 
+  const slides = await getSlides();
   const bestsellerProducts = await getBestSellerProducts();
   const featuredProducts = await getFeaturedProducts();
 
   return (
     <div>
-      <MainCarosal />
+      <MainCarosal slides={slides} />
       <div className="text-center max-w-[800px] mx-auto my-[50px] md:my-[80px]">
         <div className="text-[28px] md:text-[34px] mb-5 font-semibold leading-tight">
           Discover Worlds Between the Covers

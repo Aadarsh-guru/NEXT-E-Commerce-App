@@ -1,6 +1,11 @@
 import Link from 'next/link';
 import React from 'react';
 
+export const metadata = {
+    title: `About us - ${process.env.NEXT_PUBLIC_APP_NAME}`,
+    description: 'this is the about page',
+}
+
 export default function AboutPageOne() {
     return (
         <div>

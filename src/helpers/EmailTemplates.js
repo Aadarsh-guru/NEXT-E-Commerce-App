@@ -162,7 +162,7 @@ export const addressChangesTemplate = ({ orderId, product, address }) => {
                         <img src="${product.image}" alt="${product.title}" style="max-width: 100px;">
                         <h4>${product.title}</h4>
                         <p>Price: ₹${product.price}</p>
-                        <p>Price: ${product.quantity}</p>
+                        <p>Quantity: ${product.quantity}</p>
                     </div>
                 </div>
                 <!-- New Address Details -->

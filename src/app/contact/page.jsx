@@ -3,6 +3,11 @@ import { contactEmailTemplate } from '@/helpers/EmailTemplates';
 import sendMail from '@/helpers/SendMail';
 import React from 'react';
 
+export const metadata = {
+    title: `Contact us - ${process.env.NEXT_PUBLIC_APP_NAME}`,
+    description: 'this is the contact page',
+}
+
 function ContactPage() {
 
     const handleSendMesaage = async ({ firstName, lastName, email, phone, subject, message }) => {
