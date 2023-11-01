@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/react';
 import Header from '@/components/header/Header'
 import './globals.css'
 import { Inter } from 'next/font/google'
@@ -23,6 +24,7 @@ export default function RootLayout({ children }) {
           </header>
           <main className='min-h-screen' >
             {children}
+            <Analytics />
           </main>
           <footer>
             <Footer />
