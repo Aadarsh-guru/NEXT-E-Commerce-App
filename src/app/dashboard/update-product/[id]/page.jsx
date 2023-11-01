@@ -1,3 +1,4 @@
+import UpdateProductContainer from '@/components/dashboard/products/UpdateProductContainer';
 import React from 'react'
 
 export const metadata = {
@@ -12,7 +13,7 @@ const UpdateProductPage = ({ params }) => {
             <div className="bg-gradient-to-r from-blue-400 to-purple-500 w-full py-4 flex items-center justify-center px-6 rounded-t-lg">
                 <h4 className='text-2xl font-bold text-white'>Update Product</h4>
             </div>
-            {params.id}
+            <UpdateProductContainer productId={params.id} />
         </div>
     )
 }

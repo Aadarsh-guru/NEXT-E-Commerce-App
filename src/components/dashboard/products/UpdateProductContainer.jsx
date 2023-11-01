@@ -1,15 +1,18 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SelectBox from './SelectBox';
 import toast from 'react-hot-toast';
-import uploadToS3 from '@/helpers/UploadToS3';
 import axios from 'axios';
-import { useSession } from 'next-auth/react';
+import { useQuery } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
+import UpdateProductCarosal from './UpdateProductCarosal';
+import uploadToS3 from '@/helpers/UploadToS3';
 
-const CreateProductForm = () => {
+const UpdateProductContainer = ({ productId }) => {
 
-    const session = useSession();
-    const [formData, setFormData] = useState({ title: '', subTitle: '', description: '', images: [], category: '', price: '', stock: '', discount: 0, });
+    const router = useRouter();
+    const [images, setImages] = useState([]);
+    const [formData, setFormData] = useState({ title: '', subTitle: '', description: '', category: '', price: '', stock: '', images: [], discount: 0, });
     const [loading, setLoading] = useState(false);
 
     const handleInputChange = (e) => {
@@ -17,27 +20,43 @@ const CreateProductForm = () => {
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleImagesChange = (e) => {
-        const selectedImages = Array.from(e.target.files);
-        if (selectedImages.length > 7) {
-            e.target.value = null;
-            toast.error("You can only select up to  7 images.");
-        } else {
-            setFormData({ ...formData, images: selectedImages });
+    const { data } = useQuery(['product', productId], async () => {
+        const response = await axios.get(`/api/product/get/get-one/${productId}`)
+        return response.data?.product;
+    }, {
+        staleTime: Infinity
+    })
+
+    useEffect(() => {
+        if (data) {
+            setFormData({
+                title: data?.title,
+                subTitle: data?.subTitle,
+                description: data?.description,
+                category: data?.category,
+                price: data?.price,
+                stock: data?.stock,
+                discount: data?.discount
+            })
+            setImages(data?.images)
         }
-    };
-
-
+    }, [data, productId])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         try {
-            if (!formData.title || !formData.subTitle || !formData.description || !formData.price || !formData.stock || !formData.images[0] || !formData.category) {
+            if (images?.length === 0 && !formData.images[0]) {
+                setLoading(false);
+                toast.error('Please Select Images.');
+                return;
+            }
+            if (!formData.title || !formData.subTitle || !formData.description || !formData.price || !formData.stock || !formData.category) {
                 setLoading(false);
                 toast.error('Please fill in all required fields.');
                 return;
             }
+
             const imageKeys = [];
             for (const image of formData.images) {
                 const uploadResult = await uploadToS3(image, 'product-images');
@@ -50,15 +69,11 @@ const CreateProductForm = () => {
                     return;
                 }
             }
-            const response = await axios.post(`/api/product/create`, {
-                ...formData,
-                images: imageKeys,
-                seller: session.data?.user?.id
-            })
-
+            const response = await axios.post(`/api/product/update/${productId}`, { ...formData, images: imageKeys })
             if (response.data?.success) {
                 toast.success(response.data?.message);
                 setFormData({ title: '', subTitle: '', description: '', images: [], category: '', price: '', stock: '', discount: 0, })
+                router.back();
             } else {
                 toast.error(response.data?.message);
             }
@@ -67,6 +82,16 @@ const CreateProductForm = () => {
             toast.error('Something went wrong.');
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleImagesChange = (e) => {
+        const selectedImages = Array.from(e.target.files);
+        if (selectedImages.length + images.length > 7) {
+            e.target.value = null;
+            toast.error("You can only select up to 7 images.");
+        } else {
+            setFormData({ ...formData, images: selectedImages });
         }
     };
 
@@ -140,6 +165,10 @@ const CreateProductForm = () => {
                     />
                 </div>
 
+                <div className="mb-4">
+                    <UpdateProductCarosal slides={images} setImages={setImages} productId={productId} />
+                </div>
+
                 {/* Categories */}
                 <div className="mb-4">
                     <label htmlFor="category" className="block text-sm font-medium text-gray-700">
@@ -205,12 +234,22 @@ const CreateProductForm = () => {
                         type="submit"
                         className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:bg-blue-600 w-full active:scale-95 transition-transform"
                     >
-                        {loading ? 'Processing..' : 'Create Product'}
+                        {loading ? 'Updating Product..' : 'Update Product'}
                     </button>
+                </div>
+
+                {/* cancel changes button */}
+                <div className="mt-6 w-full">
+                    <div
+                        onClick={() => !loading && router.back()}
+                        className="w-full rounded-md border-2 px-3 py-2 text-gray-700 text-center transition-transform active:scale-[99%] cursor-pointer"
+                    >
+                        Cancel Changes
+                    </div>
                 </div>
             </form>
         </div>
-    );
-};
+    )
+}
 
-export default CreateProductForm;
+export default UpdateProductContainer
