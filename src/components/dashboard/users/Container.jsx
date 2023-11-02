@@ -46,6 +46,9 @@ const Container = ({ role }) => {
     return (
         <div className="w-full h-[calc(100%-60px)] flex flex-col justify-start items-center p-4 gap-4 overflow-y-auto ">
             {
+                users?.length !== 0 && <h1 className="text-xl font-bold text-gray-500">Showing {users?.length} {role}.</h1>
+            }
+            {
                 isLoading ? (
                     <div className="w-full h-full flex justify-center items-center">
                         <Spinner />
