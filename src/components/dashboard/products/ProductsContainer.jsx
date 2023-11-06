@@ -1,6 +1,6 @@
 'use client'
 import Spinner from '@/components/loaders/Spinner';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import React, { Fragment, useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
@@ -10,7 +10,6 @@ import { MdKeyboardArrowDown } from 'react-icons/md';
 
 const ProductsContainer = () => {
 
-    const queryClient = useQueryClient();
     const [page, setPage] = useState(1);
     const [searchValue, setSearchValue] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
@@ -116,7 +115,7 @@ const ProductsContainer = () => {
                                         <Menu.Item key={index}>
                                             <button
                                                 onClick={() => { setCategory(item?.slug); setProducts([]) }}
-                                                className={`w-full text-left px-4 py-3 text-sm capitalize hover:bg-blue-500 hover:text-white ${category === item?.name ? 'bg-blue-500 text-white' : ''}  rounded-md`}
+                                                className={`w-full text-left px-4 py-3 text-sm capitalize hover:bg-blue-500 hover:text-white ${category === item?.slug ? 'bg-blue-500 text-white' : ''}  rounded-md`}
                                             >
                                                 {item?.name.length > 45 ? `${item?.name.slice(0, 45)}...` : item?.name}
                                             </button>
@@ -140,13 +139,18 @@ const ProductsContainer = () => {
                         products?.length === 0 ?
                             (
                                 <div className="w-full h-full flex justify-center items-center">
-                                    <h1 className="text-2xl font-bold text-gray-800">No Product Found.</h1>
+                                    {
+                                        isFetching ?
+                                            <Spinner />
+                                            :
+                                            <h1 className="text-xl font-bold text-gray-800 text-center">No Product Found.</h1>
+                                    }
                                 </div>
                             )
                             :
                             (
                                 <>
-                                    <div className="w-full h-full flex justify-center items-center mb-10 md:mb-0 md:w-1/2 md:h-1/2 lg:w-1/3 lg:h-1/3">
+                                    <div className="w-full h-full flex justify-center items-start mb-10 md:mb-0 md:w-1/2 md:h-1/2 lg:w-1/3 lg:h-1/3">
                                         <h1 className="text-xl font-bold text-gray-500">Showing {products?.length} Products.</h1>
                                     </div>
                                     <div className="gap-5 my-10">

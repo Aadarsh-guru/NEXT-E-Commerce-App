@@ -14,7 +14,7 @@ const MobileMenu = ({ setShowCatMenu, showCatMenu, setMobileMenu, categories, is
         <div>
             <ul className="flex flex-col md:hidden font-bold absolute top-[50px] left-0 w-full h-[calc(100vh-50px)] bg-white border-t text-black">
                 <li className='flex justify-center p-[10px]' >
-                    <Search />
+                    <Search setMobileMenu={setMobileMenu} />
                 </li>
                 {navbarData.map((item) => {
                     return (

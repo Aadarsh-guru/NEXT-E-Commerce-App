@@ -95,7 +95,7 @@ async function getSignUpCounts(startDate, endDate) {
 async function getRevenue(startDate, endDate) {
     const orders = await Order.find({
         createdAt: { $gte: startDate, $lte: endDate },
-        status: 'placed', // Consider only placed orders
+        status: 'delivered', // Consider only placed orders
     });
 
     let revenue = 0;

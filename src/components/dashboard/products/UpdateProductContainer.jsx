@@ -57,18 +57,28 @@ const UpdateProductContainer = ({ productId }) => {
                 return;
             }
 
+            if (formData.discount > formData.price) {
+                setLoading(false);
+                toast.error('Discount cannot be greater than price.');
+                return;
+            }
+
             const imageKeys = [];
-            for (const image of formData.images) {
-                const uploadResult = await uploadToS3(image, 'product-images');
-                if (uploadResult.success) {
-                    imageKeys.push(uploadResult.key);
-                } else {
-                    console.error('Image upload failed:', uploadResult.message);
-                    setLoading(false);
-                    toast.error('Image upload failed.');
-                    return;
+
+            if (Array.isArray(formData.images)) {
+                for (const image of formData.images) {
+                    const uploadResult = await uploadToS3(image, 'product-images');
+                    if (uploadResult.success) {
+                        imageKeys.push(uploadResult.key);
+                    } else {
+                        console.error('Image upload failed:', uploadResult.message);
+                        setLoading(false);
+                        toast.error('Image upload failed.');
+                        return;
+                    }
                 }
             }
+
             const response = await axios.post(`/api/product/update/${productId}`, { ...formData, images: imageKeys })
             if (response.data?.success) {
                 toast.success(response.data?.message);

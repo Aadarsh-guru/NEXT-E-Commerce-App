@@ -3,6 +3,7 @@ import React from 'react'
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import Link from 'next/link';
+import Image from 'next/image';
 
 const MainCarosal = ({ slides }) => {
     return (
@@ -18,7 +19,7 @@ const MainCarosal = ({ slides }) => {
                 {
                     slides?.map((slide, index) => (
                         <div key={index}>
-                            <img loading='lazy' src={slide?.image} alt='slide' className='md:w-full aspect-[16/10] md:max-h-[550px] md:aspect-auto object-fill' />
+                            <Image width={768} height={550} src={slide?.image} alt='slide' className='md:w-full aspect-[16/10] md:max-h-[550px] md:aspect-auto object-fill' />
                             <Link href={slide?.url} className="px-[15px] md:px-[40px] py=[10px] md:py-[25px] bg-white absolute bottom-[25px] md:bottom-[75px] left-0 text-black/[0.9] text-[15px] md:text-[30px] uppercase font-medium cursor-pointer hover:opacity-90">
                                 Buy Now
                             </Link>
