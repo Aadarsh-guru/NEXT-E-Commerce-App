@@ -8,6 +8,7 @@ import Providers from '@/context/Providers'
 
 const inter = Inter({ subsets: ['latin'] })
 
+
 export const metadata = {
   title: `${process.env.NEXT_PUBLIC_APP_NAME}`,
   description: 'this is the book store site.',
